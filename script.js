@@ -1,6 +1,8 @@
 const divPregunta = document.getElementById("pregunta")
 const divOpciones = document.getElementById("opciones")
 
+var opts;
+
 function crearImagen(url){
     img = document.createElement("img")
     img.src = url
@@ -30,12 +32,46 @@ async function obtenerPaises() {
     }
 }
 
+
 async function inicio() {
     paisesData = await obtenerPaises()
 
-    correcto = obtenerAleatorio(paisesData)
-    incorrecto = []
-    for(i=0;i>2;i++){
-        incorrecto.push(obtenerAleatorio(paisesData))
+    opts = [{
+        data: obtenerAleatorio(paisesData),
+        isCorrect : true
+    }]
+
+    for(i=0;i<3;i++){
+        //validar que el pais no exista ya en el array
+        opts.push({
+            data: obtenerAleatorio(paisesData),
+            isCorrect: false
+        })
+    }
+
+    divPregunta.innerText = "CUAL ES LA BANDERA EL PAIS " + opts[0].data.name.common.toUpperCase()
+    opts.forEach((opt,index) => {
+        img = crearImagen(opt.data.flags.png)
+        //img.id = "opt"+(index+1)
+        img.onclick = function() {
+            imagenClickeada(this);
+        };
+
+        divOpciones.appendChild(img)
+    })
+
+    console.log(opts)
+    
+}
+
+function imagenClickeada(img){
+    url = img.src
+    dataImg = opts.find( opcion => opcion.data.flags.png == url)
+    if(dataImg.isCorrect){
+        console.log("correcto")
+    }else{
+        console.log("incorrecto")
     }
 }
+
+inicio()
