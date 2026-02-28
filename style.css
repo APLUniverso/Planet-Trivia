@@ -12,7 +12,9 @@ body{
     color: #9290C3;
 
     width: 100vw;
-    height: 100vh;
+    min-height: 90vh;
+    padding-top: 5vh;
+    padding-bottom:5vh ;
 
     display: flex;
     flex-direction: column;
@@ -34,7 +36,8 @@ body{
 .tiempoPorcentaje{
     background-color: #1B1A55;
 
-    width: 620px;
+    width: 80%;
+    max-width: 620px;
     height: 30px;
     padding: 10px;
 
@@ -64,7 +67,11 @@ body{
 /*STILO DE LA PREGUNTA*/
 
 .pregunta{
+    text-align: center;
     font-size: 27px;
+
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 /*STILO DE LAS OPCIONES*/
