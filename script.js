@@ -4,9 +4,6 @@ const divOpciones = document.getElementById("opciones")
 const timeNum = document.getElementById("timeIndicator")
 const timeBar = document.getElementById("timePct")
 
-var opts;
-var timeStart;
-
 function crearImagen(url){
     img = document.createElement("img")
     img.src = url
@@ -47,11 +44,10 @@ async function obtenerPaises() {
     }
 }
 
-
+var opts;
 async function inicio() {
     paisesData = await obtenerPaises();
     timeStart = Date.now();
-    console.log(timeStart)
 
     opts = [{
         data: obtenerAleatorio(paisesData),
@@ -69,37 +65,49 @@ async function inicio() {
             i--;
         } 
     }
-
+    divPregunta.innerText = "CUAL ES LA BANDERA DEL PAIS " + (opts[0].data.name.nativeName.spa || opts[0].data.name.common).toUpperCase()
     opts = desordenarArray(opts)
 
-    divPregunta.innerText = "CUAL ES LA BANDERA DEL PAIS " + opts[0].data.name.common.toUpperCase()
+    
     opts.forEach((opt) => {
-        img = crearImagen(opt.data.flags.png)
-        img.onclick = function() {
-            imagenClickeada(this);
-        };
-        divOpciones.appendChild(img)
+        divOpciones.innerHTML += `
+            <div class="optCard">
+                <img onclick="imagenClickeada(this)" src="${opt.data.flags.png}" alt="${opt.data.flags.alt}">
+                <p class="invi">${opt.data.name.nativeName.spa || opt.data.name.common}</p>
+            </div>
+        `; 
     })
 }
 
-function imagenClickeada(img){
-    url = img.src
-    dataImg = opts.find( opcion => opcion.data.flags.png == url)
-    if(dataImg.isCorrect){
-        console.log("correcto")
-    }else{
-        console.log("incorrecto")
-    }
-    timeBar.style.animationPlayState = "paused";
+function imagenClickeada(){
+    const optDivs = document.querySelectorAll(".optCard")
+    optDivs.forEach((div) => {
+        const img = div.querySelector("img");
+        const url = img.src
+        const p = div.querySelector("p")
+        const dataImg = opts.find( opcion => opcion.data.flags.png == url)
+        
+        if (dataImg.isCorrect){
+            div.style.backgroundColor = "#00bf1031"
+            div.style.border = "5px solid #00bf11"
+        }else{
+            div.style.backgroundColor = "#ff33003d"
+            div.style.border = "5px solid #ff3100"
+        }
+        div.style.borderRadius = "20px"
+
+        img.style.width = "250px"
+        img.style.height = "150px"
+        p.classList.remove("invi")
+    })
+    pausa = true
 }
 
-inicio()
-
-//ENTENDER A LA PREFECCION COMO FUNCIONA ESTO PARA MEJORRLO
 let tiempoInicio = null;
+let pausa = false;
 function animar(timestamp) {
     if (!tiempoInicio) tiempoInicio = timestamp;
-
+    if (pausa) return;
     const tiempoTranscurrido = (timestamp - tiempoInicio) / 1000;
     const tiempoRestante = Math.max(10 - tiempoTranscurrido, 0);
 
@@ -110,11 +118,26 @@ function animar(timestamp) {
     const porcentaje = (tiempoRestante / 10) * 100;
     timeBar.style.width = porcentaje + "%";
 
+    if(porcentaje <= 20){
+        timeBar.style.backgroundColor = "#ff3100"
+    }else if(porcentaje <= 40){
+        timeBar.style.backgroundColor = "#ff9901"
+    }else if(porcentaje <= 60){
+        timeBar.style.backgroundColor = "#fece00"
+    }else if(porcentaje <= 80){
+        timeBar.style.backgroundColor = "#8dd100"
+    }else{
+        timeBar.style.backgroundColor = "#00bf11"
+    }
+
     if (tiempoRestante > 0) {
         requestAnimationFrame(animar);
     } else {
-        console.log("Tiempo terminado");
+        imagenClickeada()
     }
 }
 
 requestAnimationFrame(animar);
+inicio()
+
+
