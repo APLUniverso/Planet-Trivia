@@ -4,6 +4,9 @@ const divOpciones = document.getElementById("opciones")
 const timeNum = document.getElementById("timeIndicator")
 const timeBar = document.getElementById("timePct")
 
+//NOMBRE DE LOS PAISES EN ESPAÑOL
+const displayNames = new Intl.DisplayNames(['es'], { type: 'region' });
+
 function crearImagen(url){
     img = document.createElement("img")
     img.src = url
@@ -29,7 +32,7 @@ function desordenarArray(array) {
 async function obtenerPaises() {
     try {
         const response = await fetch(
-            "https://restcountries.com/v3.1/all?fields=name,flags,capital,region,population"
+            "https://restcountries.com/v3.1/all?fields=name,cca2,flags,capital,population"
         );
 
         if (!response.ok) {
@@ -37,6 +40,7 @@ async function obtenerPaises() {
         }
 
         const data = await response.json();
+        console.log(data)
         return data
 
     } catch (error) {
@@ -65,15 +69,18 @@ async function inicio() {
             i--;
         } 
     }
-    divPregunta.innerText = "CUAL ES LA BANDERA DEL PAIS " + (opts[0].data.name.nativeName.spa || opts[0].data.name.common).toUpperCase()
+    divPregunta.innerText = "CUAL ES LA BANDERA DE " + displayNames.of(opts[0].data.cca2)
     opts = desordenarArray(opts)
 
     
     opts.forEach((opt) => {
+        const url = opt.data.flags.png
+        const alt = opt.data.flags.alt
+        const nombre = displayNames.of(opt.data.cca2)
         divOpciones.innerHTML += `
             <div class="optCard">
-                <img onclick="imagenClickeada(this)" src="${opt.data.flags.png}" alt="${opt.data.flags.alt}">
-                <p class="invi">${opt.data.name.nativeName.spa || opt.data.name.common}</p>
+                <img onclick="imagenClickeada(this)" src="${url}" alt="${alt}">
+                <p class="invi">${nombre}</p>
             </div>
         `; 
     })
