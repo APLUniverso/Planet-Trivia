@@ -17,11 +17,60 @@ body{
     padding-bottom:5vh ;
 
     display: flex;
+    justify-content: center;
+}
+
+#pantallaJuego{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/*PANTALLA DE INICIO*/
+
+.pantallaInicio{
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.822);
+
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 10px;
 }
+
+.pantallaInicio p{
+    text-align: center;
+    font-size: 50px;
+}
+
+.pantallaInicio button{
+    background: #00bf11;
+    color: white;
+
+    border: none;
+
+    height: 150px;
+    width: 150px;
+
+    box-shadow: 0 20px 0 0 #007009;
+
+    font-size: 50px;
+
+    transition: all ease-in-out 0.3;
+}
+
+.pantallaInicio button:active{
+    transform: translateY(20px);
+    box-shadow: 0 0 0 0 #007009;
+}
+
+/*CARTA CON LA PREGUNTA*/
 
 .quizCard{
     display: flex;
@@ -40,6 +89,7 @@ body{
     max-width: 620px;
     height: 30px;
     padding: 10px;
+    margin-bottom: 10px;
 
     border-radius: 50px;
     border: 4px solid white;
@@ -106,6 +156,23 @@ body{
 .optCard p{
     font-size: 18px;
     text-align: center;
+}
+
+/*VOLVER A JUGAR BOTON*/
+
+#volverJugar{
+    align-self: center;
+    justify-self: center;
+
+    margin-top: 20px;
+
+    height: 40px;
+    width: 160px;
+
+    border: none;
+    border-radius: 15px;
+    background: #EEA727;
+
 }
 
 /*CLASES IMPORTANTES*/

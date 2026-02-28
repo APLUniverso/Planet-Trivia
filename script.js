@@ -1,8 +1,13 @@
+const pantallaInicio = document.getElementById("PantallaInicio")
+const play = document.getElementById("play")
+
 const divPregunta = document.getElementById("pregunta")
 const divOpciones = document.getElementById("opciones")
 
 const timeNum = document.getElementById("timeIndicator")
 const timeBar = document.getElementById("timePct")
+
+const againPlay = document.getElementById("volverJugar")
 
 //NOMBRE DE LOS PAISES EN ESPAÑOL
 const displayNames = new Intl.DisplayNames(['es'], { type: 'region' });
@@ -50,7 +55,6 @@ async function obtenerPaises() {
 var opts;
 async function inicio() {
     paisesData = await obtenerPaises();
-    timeStart = Date.now();
 
     opts = [{
         data: obtenerAleatorio(paisesData),
@@ -106,6 +110,7 @@ function imagenClickeada(){
         img.style.height = "150px"
         p.classList.remove("invi")
     })
+    againPlay.classList.remove("invi")
     pausa = true
 }
 
@@ -143,7 +148,28 @@ function animar(timestamp) {
     }
 }
 
-requestAnimationFrame(animar);
+function reiniciarJuego(){
+    againPlay.classList.add("invi")
+
+    divOpciones.innerHTML = ""
+    tiempoInicio = null
+    pausa = false
+
+    timeBar.style.width = "100%"
+    timeBar.style.backgroundColor = "#00bf11";
+
+    inicio()
+    requestAnimationFrame(animar);
+}
+
+play.addEventListener("click",()=>{
+    pantallaInicio.classList.add("invi")
+    requestAnimationFrame(animar);
+})
+
 inicio()
+againPlay.addEventListener("click",reiniciarJuego)
+
+
 
 
